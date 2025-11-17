@@ -5,29 +5,29 @@ import {deviceToString, getDevices, simctl} from './xcrun'
 
 async function run(): Promise<void> {
   try {
-    const model = core.getInput('model')
-    let os = core.getInput('os')
-    const os_version = core.getInput('os_version')
-    const udid = core.getInput('udid')
+    const model = core.getInput('model')?.trim()?.toLowerCase()
+    let os = core.getInput('os')?.trim()?.toLowerCase()
+    const os_version = core.getInput('os_version')?.trim()
+    const udid = core.getInput('udid')?.trim()?.toLowerCase()
 
     if (!udid && !os && !os_version && !model) {
       // Give a reasonable default, otherwise we may end up with tvOS, which is
       // unlikely to be a good guess.
-      os = 'iOS'
+      os = 'ios'
     }
 
     const matchingDevices = (await getDevices()).filter(device => {
       core.debug(`- ${deviceToString(device)}`)
 
-      if (udid && device.udid !== udid) {
+      if (udid && device.udid.toLowerCase() !== udid) {
         core.debug('UDID does not match the request')
         return false
       }
-      if (model && device.model !== model) {
+      if (model && device.model.toLowerCase() !== model) {
         core.debug('Model does not match the request')
         return false
       }
-      if (os && device.os !== os) {
+      if (os && device.os.toLowerCase() !== os) {
         core.debug('OS does not match the request')
         return false
       }

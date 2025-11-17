@@ -14,6 +14,11 @@ test('boots a device', () => {
     cp.execFileSync(nodeProcess, [actionMain], options).toString()
   ).toContain('Booting device')
 
+  process.env['INPUT_MODEL'] = 'iphone 16'
+  expect(
+    cp.execFileSync(nodeProcess, [actionMain], options).toString()
+  ).toContain('Booting device')
+
   process.env['INPUT_WAIT_FOR_BOOT'] = 'true'
   expect(
     cp.execFileSync(nodeProcess, [actionMain], options).toString()
